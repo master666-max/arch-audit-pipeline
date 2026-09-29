@@ -1,29 +1,60 @@
 # arch-audit-pipeline
 
-架构理解六步流程（含硬性审计门）—— ZCode / CodeBuddy 标准 Skill。
+**项目快照 → 架构理解六步审计 → 图表与双文档产出** —— ZCode / CodeBuddy 标准 Skill。
 
-对既存代码库产出"供人理解的上层设计"：**范围框定 → 静态制图 → 分层下钻 → 架构推断 → 架构审计 → 事实校验**。审计动作嵌入每一步，⑤ 为独立质量门：Critical 未清零，`architecture.md` 不得标记为可交付。⑥ 对报告做符号级反幻觉核对。
+对既存代码库（或散落多处的项目文件）产出一条可复验的交付物链：
+
+| 阶段 | 步骤 | 产出 |
+|---|---|---|
+| 前置 | ⓪ 项目搜索与快照打包 | 只读副本 bundle + `README-BUNDLE.md`（来源映射 / 件数基准 / 剔除与漏收清单） |
+| 审计 | ①范围框定 → ②静态制图 → ③分层下钻 → ④架构推断 → ⑤架构审计 → ⑥事实校验 | `AGENTS.md` / `dep-edges.json` / `module-cards/` / `architecture.md` / `audit-report.md` / `facts-checklist.md` |
+| 产出 | ⑦图表产出 → ⑧双文档产出 | `diagrams/` 图集（图即代码）+ 技术版审计报告 + 零基础大白话说明书 |
+
+## 核心立场
+
+- **审计是硬性质量门，不是增值项**——只描述现状不评估合理性的架构图，是无法区分主干和肿瘤的解剖图。⑤ 为独立关卡：Critical（循环依赖、分层彻底失效、声明扩展点完全未使用等）未清零，`architecture.md` 不得标记为可交付。
+- **⑥ 反幻觉兜底**——报告每条断言必须附 `file:line` 证据；证伪项回写修正后流程才算交付。
+- **防偷懒七锁**（执行纪律，与任何步骤指令冲突时以它为准）：
+  1. 串行门——上一步产物未落盘不得开始下一步；
+  2. 执行日志即证据——没有 `pipeline-log.md` 记录的步骤视为未执行；
+  3. 数字必须脚本实算——零结果也要贴"做了哪些检查才判零"；
+  4. **沙级颗粒度**——产物按最小可验证单元（一条边 / 一行行号 / 一件文件 / 一条断言）验收；手册章节结构只是颗粒度的示例呈现，**不是照抄的模板**；
+  5. 每步验收底线——各步骤末尾的硬标准，不达标 = 没做完；
+  6. 结束前自查表——任何一项不满足回去补齐，不得带病收工；
+  7. 不可缩水 · 不可污染——bundle 件数基准全程不变；"篇幅/时间有限"不是缩水理由。
 
 ## 安装
 
-复制本目录到 `~/.zcode/skills/arch-audit-pipeline`（用户级）后重启会话即可被技能调度识别。
+复制本目录到 `~/.zcode/skills/arch-audit-pipeline`（用户级），重启会话即被技能调度识别。
 
 ## 目录
 
 ```
-SKILL.md                                  # 六步流程主指令（含每步嵌入的审计动作与降级策略）
+SKILL.md                                  # 主指令：⓪+六步+⑦⑧（每步嵌入审计动作与验收底线、执行纪律七锁）
 references/dependency-inventory.md        # 插件/MCP/Skill/CLI 完整依赖清单与安装方式
-references/archify-authoring-notes.md     # archify 落地本流程图的实操要点（已验证修法）
+references/diagram-playbook.md            # ⑦ 图表方法论：选图速查表/维护四原则/最小四张/与审计产物对接/archify 映射
+references/doc-playbook.md                # ⑧ 双文档方法论：技术版八部分与大白话九节颗粒度清单/DOCX 工程规范/视觉验收硬门
+references/archify-authoring-notes.md     # archify 落地实操要点（已验证修法）
 assets/architecture-audit-pipeline.html   # 交互式流程图（三泳道：依赖封装/主流程/阻断回路）
 assets/architecture-audit-pipeline.workflow.json  # archify workflow v2 源规格，可改后重渲染
 ```
 
 ## 依赖
 
-首选封装：Superpowers（流程骨架+审查门）、Cognee（持久代码知识图）；备选与降级策略见 `references/dependency-inventory.md`。封装缺失时六步仍须完整走完——审计门不可裁剪。
+首选封装：Superpowers（流程骨架 + 审查门）、Cognee（持久代码知识图）、Serena（符号级查找）、import-linter（分层规则审计）。**封装是加速器不是前置条件**：任何依赖缺失时按内置降级策略（grep 建边表 + 自写 Tarjan 环检测 / 方向矩阵断言）继续，⓪→⑧ 必须完整走完——审计门不可裁剪。详见 `references/dependency-inventory.md`。
+
+## ⑦ 用图回答问题
+
+看懂一个项目的关键不是"画多少种图"，而是**用图回答别人（和三个月后的你自己）会问的问题**：系统由哪几块组成（容器图）、模块怎么依赖（自动生成）、一次请求走什么路（时序图）、数据什么关系（ER 图）……最小起步组合四张：容器图 + 核心链路时序图 + ER 图 + 自动生成的依赖图。图的头号敌人是过期——能自动生成的绝不手画，手画的必须登记"过期信号"。详见 `references/diagram-playbook.md`。
+
+## ⑧ 双文档产出
+
+审计结论只有落成"能被两类读者各自完整看懂"的文档才算交付：**技术版**（每条断言附 file:line，字数不设上限，六步产物全部可对应到章节）+ **大白话版**（比喻优先、零代码出现、名词词典兜底，计数与结论与技术版逐字一致）。DOCX 工程规范与视觉验收硬门（渲染逐页判定，全 pass 才交付）见 `references/doc-playbook.md`。
 
 ## 流程图
 
-![preview](assets/architecture-audit-pipeline.html)
+（HTML 为交互式交付物，克隆后在浏览器打开 `assets/architecture-audit-pipeline.html`；改 `workflow.json` 后用 archify `deliver` 重渲染。）
 
-（HTML 为交互式交付物，克隆后在浏览器打开；改 `workflow.json` 后用 archify `deliver` 重渲染。）
+## License
+
+MIT
