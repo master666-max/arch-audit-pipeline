@@ -1,0 +1,309 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "架构理解六步流程（⑤ 审计为硬性质量门）",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "output": "tmp/arch-six-step/architecture-audit-pipeline.html",
+    "legend": {
+      "entries": {
+        "backend": {
+          "label": "流程步骤"
+        },
+        "security": {
+          "label": "质量门 / 阻断"
+        },
+        "external": {
+          "label": "依赖封装（插件 · MCP · Skill）"
+        }
+      }
+    },
+    "views": [
+      {
+        "id": "main-flow",
+        "label": "六步主流程",
+        "focus": [
+          "scope",
+          "map",
+          "drill",
+          "infer",
+          "audit",
+          "verify"
+        ],
+        "note": "从范围框定到事实校验的一条主路，审计动作嵌入每一步。"
+      },
+      {
+        "id": "gate-loop",
+        "label": "审计阻断回路",
+        "focus": [
+          "audit",
+          "blocked",
+          "infer"
+        ],
+        "note": "发现 Critical 即阻断 architecture.md 交付，整改后重审。"
+      },
+      {
+        "id": "deps-map",
+        "label": "依赖封装映射",
+        "focus": [
+          "dep_bstorm",
+          "dep_codegraph",
+          "dep_explore",
+          "dep_review",
+          "dep_symbols"
+        ],
+        "note": "插件、MCP、内置能力与各步骤的对应关系。"
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "tooling",
+      "label": "依赖封装（插件 · MCP · Skill）"
+    },
+    {
+      "id": "pipeline",
+      "label": "六步主流程"
+    },
+    {
+      "id": "gate",
+      "label": "审计阻断回路",
+      "variant": "exception"
+    }
+  ],
+  "phases": [
+    {
+      "id": "ground",
+      "label": "锚定与制图",
+      "fromCol": 0,
+      "toCol": 2
+    },
+    {
+      "id": "infer_audit",
+      "label": "推断与审计门",
+      "fromCol": 3,
+      "toCol": 4,
+      "variant": "emphasis"
+    },
+    {
+      "id": "deliver",
+      "label": "校验交付",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "scope",
+    "map",
+    "drill",
+    "infer",
+    "audit",
+    "verify"
+  ],
+  "semanticChecks": {
+    "allowedRoots": [
+      "scope",
+      "dep_bstorm",
+      "dep_codegraph",
+      "dep_explore",
+      "dep_review",
+      "dep_symbols"
+    ],
+    "allowedTerminals": [
+      "verify"
+    ],
+    "requiredPaths": [
+      {
+        "from": "scope",
+        "to": "verify"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "scope",
+      "lane": "pipeline",
+      "col": 0,
+      "type": "backend",
+      "label": "① 范围框定",
+      "sublabel": "声明 vs 推断交叉验证",
+      "tag": "AGENTS.md"
+    },
+    {
+      "id": "map",
+      "lane": "pipeline",
+      "col": 1,
+      "type": "backend",
+      "label": "② 静态制图",
+      "sublabel": "对照①：找幽灵模块",
+      "tag": "代码依赖知识图"
+    },
+    {
+      "id": "drill",
+      "lane": "pipeline",
+      "col": 2,
+      "type": "backend",
+      "label": "③ 分层下钻",
+      "sublabel": "卡片带依赖指纹",
+      "tag": "module-cards"
+    },
+    {
+      "id": "infer",
+      "lane": "pipeline",
+      "col": 3,
+      "type": "backend",
+      "label": "④ 架构推断",
+      "sublabel": "方向 · 循环 · 死代码",
+      "tag": "architecture.md"
+    },
+    {
+      "id": "audit",
+      "lane": "pipeline",
+      "col": 4,
+      "type": "security",
+      "label": "⑤ 架构审计",
+      "sublabel": "严重度分级",
+      "tag": "audit-report.md"
+    },
+    {
+      "id": "verify",
+      "lane": "pipeline",
+      "col": 5,
+      "type": "backend",
+      "label": "⑥ 事实校验",
+      "sublabel": "与⑤交叉核对反幻觉",
+      "tag": "facts-checklist.md"
+    },
+    {
+      "id": "dep_bstorm",
+      "lane": "tooling",
+      "col": 0,
+      "type": "external",
+      "label": "Superpowers",
+      "sublabel": "头脑风暴 Skill"
+    },
+    {
+      "id": "dep_codegraph",
+      "lane": "tooling",
+      "col": 1,
+      "type": "external",
+      "label": "Cognee",
+      "sublabel": "codegraph MCP"
+    },
+    {
+      "id": "dep_explore",
+      "lane": "tooling",
+      "col": 2,
+      "type": "external",
+      "label": "Explore",
+      "sublabel": "ZCode 内置 Subagent"
+    },
+    {
+      "id": "dep_review",
+      "lane": "tooling",
+      "col": 4,
+      "type": "external",
+      "label": "审查工具链",
+      "sublabel": "Superpowers · CLI 工具"
+    },
+    {
+      "id": "dep_symbols",
+      "lane": "tooling",
+      "col": 5,
+      "type": "external",
+      "label": "符号查找",
+      "sublabel": "Serena / Cognee MCP"
+    },
+    {
+      "id": "blocked",
+      "lane": "gate",
+      "col": 4,
+      "type": "security",
+      "label": "Critical 阻断",
+      "sublabel": "禁止标记交付",
+      "tag": "整改后重审"
+    }
+  ],
+  "edges": [
+    {
+      "from": "scope",
+      "to": "map"
+    },
+    {
+      "from": "map",
+      "to": "drill"
+    },
+    {
+      "from": "drill",
+      "to": "infer"
+    },
+    {
+      "from": "infer",
+      "to": "audit"
+    },
+    {
+      "from": "audit",
+      "to": "verify",
+      "label": "Critical 清零"
+    },
+    {
+      "from": "audit",
+      "to": "blocked",
+      "role": "error"
+    },
+    {
+      "from": "blocked",
+      "to": "audit",
+      "role": "return",
+      "variant": "dashed"
+    },
+    {
+      "from": "dep_bstorm",
+      "to": "scope",
+      "route": "straight",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "dep_codegraph",
+      "to": "map",
+      "route": "straight",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "dep_explore",
+      "to": "drill",
+      "route": "straight",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "dep_review",
+      "to": "audit",
+      "route": "straight",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "dep_symbols",
+      "to": "verify",
+      "route": "straight",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "硬性质量门（不可裁剪）",
+      "items": [
+        "⑤ 是独立关卡，不是事后增值项",
+        "Critical 未清零：architecture.md 不得标可交付",
+        "⑥ 每条断言须有代码证据（反幻觉）"
+      ]
+    }
+  ]
+}
