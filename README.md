@@ -8,7 +8,7 @@
 
 | 阶段 | 步骤 | 产出 |
 |---|---|---|
-| 前置 | ⓪ 项目搜索与快照打包 | 只读副本 bundle + `README-BUNDLE.md`（来源映射 / 件数基准 / 剔除与漏收清单） |
+| 前置 | ⓪ 项目搜索与快照打包（**确定性程序**：git index → 包根 → 索引 → import 闭包信号阶梯 + scope-probe 探测双跑一致 + 覆盖率双检） | 只读副本 bundle + `README-BUNDLE.md` + `scope-probe-result.json`（in_scope/out_reference/excluded 三清单） |
 | 审计 | ①范围框定 → ②静态制图 → ③分层下钻 → ④架构推断 → ⑤架构审计 → ⑥事实校验 | `AGENTS.md` / `dep-edges.json` / `module-cards/` / `architecture.md` / `audit-report.md` / `facts-checklist.md` |
 | 产出 | ⑦图表产出 → ⑧双文档产出 | `diagrams/` 图集（图即代码）+ 技术版审计报告 + 零基础大白话说明书 |
 
