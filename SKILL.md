@@ -186,6 +186,7 @@ agent_created: true
 | 代码知识图 | Cognee codegraph（MCP / pip） | ✅ cognee 1.6.1 已装（pip，Python 3.14，import 可用；已知共存警告 transformers/tokenizers 错配，不影响本体） | Tree-sitter/grep + LSP 建边列表 |
 | 模块下钻 | Explore 子代理 | ✅ 内置 | 直接分批读目录，人工归纳卡片 |
 | 符号查找 | Serena MCP | ✅ 已注册（~/.zcode/cli/config.json → mcp.servers.serena，uvx 拉 oraios/serena 2.0.0.dev0，context=codex；新会话生效） | Cognee 检索或 grep -n |
+| 双文档生成（⑧） | **官方 `docx` skill**（[anthropics/skills](https://github.com/anthropics/skills)，≈37.5k★，市面最成熟：docx-js 创建新文档 + Python/OOXML 编辑修订批注，全生命周期） | ✅ 本机捆绑 `documents:docx`；备选重型排版 minimax-docx（.NET OpenXML，13 种美学配方含 GB/T 公文，需 dotnet SDK——本机缺）；轻量降级 python-docx 1.2.0（已装，⑧ 实证可用） | 手写 OpenXML（最后手段） |
 | 依赖规则审计 | ArchUnit / dependency-cruiser / import-linter | ✅ import-linter 2.15 已装——注意 Scripts 不在 PATH：用完整路径 `…/Python314/Scripts/lint-imports.exe` 或先 `export PATH`；`py -m importlinter` 不可用（无 __main__） | 在②的边列表上自写环检测与分层校验脚本 |
 
 封装是加速器，不是前置条件：任何环境下 ⓪→⑧ 都必须完整走完，审计门不可裁剪。

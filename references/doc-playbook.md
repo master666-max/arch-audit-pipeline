@@ -53,7 +53,7 @@
 | 页脚页码（PAGE 域）、页眉文档标识 | 无页码不可引用 |
 | 中文字体双写：`font.name` + `rFonts w:eastAsia` | 中文回退宋体/乱码 |
 | 插图 matplotlib 需显式中文字体声明（如 Microsoft YaHei），生成后逐张人工核图 | 豆腐块/文字溢出框 |
-| 工具降级序：minimax-docx（.NET）→ python-docx → 手写 OpenXML；COM 转 PDF 用 Word Application SaveAs2 FileFormat=17 | 环境缺依赖时卡死 |
+| 工具降级序：**官方 docx skill（`documents:docx`，docx-js 创建 + OOXML 编辑，首选）** → minimax-docx（.NET OpenXML，需 dotnet SDK）→ python-docx → 手写 OpenXML；COM 转 PDF 用 Word Application SaveAs2 FileFormat=17 | 环境缺依赖时卡死 |
 
 ## §D 视觉验收硬门（全 pass 才准交付）
 
