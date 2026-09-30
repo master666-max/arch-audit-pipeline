@@ -60,3 +60,4 @@ excluded      : [{path, rule}]                                  # 被剔除 + �
 | 大目录凭感觉切 | 0.3 规则先跑（du + 规则号），再人工复核——规则先行，人工只审例外 |
 | 两次执行边界不同 | scope-probe 双跑一致 + 结果 JSON 留档：差异必须能 diff 出来 |
 | 漏收（界外引用界内） | 反向覆盖 = 0 硬门 |
+| 大小写错配（Windows 开发、Linux 崩） | 三法（Windows 原生即可，无需 Linux）：①**静态比对**——import 书写名 vs 真实文件名做字符串级比对（零依赖、不依赖运行覆盖）；②**动态复跑** `PYTHONCASECHECK=1 py -m pytest …`（强制 import 大小写严格，等价 Linux 行为）；③真 Linux（WSL/CI ubuntu runner）——可选后续。**实测记录（2026-09-30，Python 3.14.7/Windows）**：默认 import 已大小写严格（对照实验 Real.py vs import real 三态），三法实测 173 条内部导入 0 错配 |
